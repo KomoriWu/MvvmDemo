@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
     }
 
     private void setViewModel() {
+
         mViewModel.getUserName().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
