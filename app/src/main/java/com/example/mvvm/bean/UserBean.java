@@ -9,6 +9,10 @@ public class UserBean {
     private String userName;
     private String phone;
 
+    public UserBean(String userName) {
+        this.userName = userName;
+    }
+
     public UserBean(String userName, String phone) {
         this.userName = userName;
         this.phone = phone;
