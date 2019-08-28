@@ -38,18 +38,7 @@ public class UserViewModel extends ViewModel {
         mUserDao.insert(bean);
     }
 
-//    public LiveData<List<UserBean>> getUserBeanAll() {
-//        return mUserDao.getUserBeanAll();
-//    }
-
-//    public String getLastUserName() {
-//        List<UserBean> list = getUserBeanAll().getValue();
-//        if (list != null) {
-//            int index = list.size() - 1;
-//            if (index > 0) {
-//                return list.get(index).getUserName();
-//            }
-//        }
-//        return "default";
-//    }
+    public LiveData<List<UserBean>> getUserBeanAll() {
+        return mUserDao.getUserBeanAll();
+    }
 }

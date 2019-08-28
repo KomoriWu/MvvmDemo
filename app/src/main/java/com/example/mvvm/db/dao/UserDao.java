@@ -10,8 +10,6 @@ import com.example.mvvm.bean.UserBean;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
-
 /**
  * Author: KomoriWu
  * Date: 2019/8/28 13:32
@@ -24,6 +22,6 @@ public interface UserDao {
     List<Long> insert(UserBean... bean);
 
     @Query("SELECT * from UserBean")
-    Flowable<List<UserBean>> getUserBeanAll();
+    LiveData<List<UserBean>> getUserBeanAll();
 
 }

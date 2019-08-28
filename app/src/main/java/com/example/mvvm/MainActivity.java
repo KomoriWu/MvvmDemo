@@ -12,15 +12,10 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.mvvm.aop.annotation.SingleClick;
 import com.example.mvvm.bean.UserBean;
 import com.example.mvvm.databinding.ActivityMainBinding;
-import com.example.mvvm.db.AppDatabase;
 import com.example.mvvm.presenter.Presenter;
 import com.example.mvvm.vm.UserViewModel;
 
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements Presenter {
 
@@ -38,6 +33,14 @@ public class MainActivity extends AppCompatActivity implements Presenter {
         mBinding.setVm(mViewModel);
         //数据改变，UI自动会更新
         mBinding.setLifecycleOwner(this);
+        mViewModel.getUserBeanAll().observe(this, new Observer<List<UserBean>>() {
+            @Override
+            public void onChanged(List<UserBean> userBeans) {
+                if (userBeans.size() - 1 > 0) {
+                    mViewModel.setUserName(userBeans.get(userBeans.size() - 1).getUserName());
+                }
+            }
+        });
 //        setViewModel();
 
 //        bindChange();
@@ -75,33 +78,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
                 Log.e("tag", "click");
 //                mViewModel.getUserName().postValue("postValue");
                 index++;
-
-                UserBean user = new UserBean();
-                user.setPhone("18988195061");
-                user.setUserName("tuacy");
-                List<Long> ids = AppDatabase.getInstance().userDao().insert(user);
-                if (ids != null) {
-                    for (Long id : ids) {
-                        Log.d("tuacy", "id = " + id);
-                    }
-                }
-
-                AppDatabase.getInstance().userDao()
-                        .getUserBeanAll()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<List<UserBean>>() {
-                            @Override
-                            public void accept(List<UserBean> entities) {
-                                if (entities != null) {
-                                    for (UserBean user : entities) {
-                                        Log.d("tuacy", user.toString());
-                                    }
-                                }
-
-                            }
-                        });
-//                mViewModel.insert(new UserBean("insert user"+index, "131l"));
+                mViewModel.insert(new UserBean("komori" + index, "101"));
                 break;
         }
     }
