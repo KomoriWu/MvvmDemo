@@ -1,7 +1,14 @@
 package com.example.mvvm.vm;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.mvvm.bean.UserBean;
+import com.example.mvvm.db.AppDatabase;
+import com.example.mvvm.db.dao.UserDao;
+
+import java.util.List;
 
 /**
  * Author: KomoriWu
@@ -10,6 +17,11 @@ import androidx.lifecycle.ViewModel;
  */
 public class UserViewModel extends ViewModel {
     private MutableLiveData<String> mUserName;
+    private UserDao mUserDao;
+
+    public UserViewModel() {
+        mUserDao = AppDatabase.getInstance().userDao();
+    }
 
     public MutableLiveData<String> getUserName() {
         if (mUserName == null) {
@@ -20,5 +32,24 @@ public class UserViewModel extends ViewModel {
 
     public void setUserName(String userName) {
         mUserName.setValue(userName);
+    }
+
+    public void insert(UserBean bean) {
+        mUserDao.insert(bean);
+    }
+
+    public LiveData<List<UserBean>> getUserBeanAll() {
+        return mUserDao.getUserBeanAll();
+    }
+
+    public String getLastUserName() {
+        List<UserBean> list = getUserBeanAll().getValue();
+        if (list != null) {
+            int index = list.size() - 1;
+            if (index > 0) {
+                return list.get(index).getUserName();
+            }
+        }
+        return "default";
     }
 }

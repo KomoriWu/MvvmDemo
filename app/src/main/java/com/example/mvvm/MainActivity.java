@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -21,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
 
     private ActivityMainBinding mBinding;
     private UserViewModel mViewModel;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
         mBinding.setLifecycleOwner(this);
 //        setViewModel();
 
-        bindChange();
+//        bindChange();
     }
 
     private void setViewModel() {
@@ -67,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements Presenter {
         switch (view.getId()) {
             case R.id.btn:
                 Log.e("tag", "click");
-                mViewModel.getUserName().postValue("postValue");
+//                mViewModel.getUserName().postValue("postValue");
+                index++;
+                mViewModel.insert(new UserBean("insert user"+index, "131l"));
                 break;
         }
     }
