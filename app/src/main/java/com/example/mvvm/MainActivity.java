@@ -12,8 +12,15 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.mvvm.aop.annotation.SingleClick;
 import com.example.mvvm.bean.UserBean;
 import com.example.mvvm.databinding.ActivityMainBinding;
+import com.example.mvvm.db.AppDatabase;
 import com.example.mvvm.presenter.Presenter;
 import com.example.mvvm.vm.UserViewModel;
+
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements Presenter {
 
@@ -25,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mBinding.setUser(new UserBean("komori", "176"));
+//        mBinding.setUser(new UserBean("komori", "176"));
         mBinding.setPresenter(this);
         mViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mBinding.setVm(mViewModel);
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
         mViewModel.getUserName().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                mBinding.setUser(new UserBean(s));
+//                mBinding.setUser(new UserBean(s));
             }
         });
     }
@@ -51,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Presenter {
             public void run() {
                 try {
                     Thread.sleep(1000);
-                    mBinding.setUser(new UserBean("komori02", "176"));
+//                    mBinding.setUser(new UserBean("komori02", "176"));
 //                    mBinding.tvHello.setText("komori03");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -68,7 +75,33 @@ public class MainActivity extends AppCompatActivity implements Presenter {
                 Log.e("tag", "click");
 //                mViewModel.getUserName().postValue("postValue");
                 index++;
-                mViewModel.insert(new UserBean("insert user"+index, "131l"));
+
+                UserBean user = new UserBean();
+                user.setPhone("18988195061");
+                user.setUserName("tuacy");
+                List<Long> ids = AppDatabase.getInstance().userDao().insert(user);
+                if (ids != null) {
+                    for (Long id : ids) {
+                        Log.d("tuacy", "id = " + id);
+                    }
+                }
+
+                AppDatabase.getInstance().userDao()
+                        .getUserBeanAll()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<List<UserBean>>() {
+                            @Override
+                            public void accept(List<UserBean> entities) {
+                                if (entities != null) {
+                                    for (UserBean user : entities) {
+                                        Log.d("tuacy", user.toString());
+                                    }
+                                }
+
+                            }
+                        });
+//                mViewModel.insert(new UserBean("insert user"+index, "131l"));
                 break;
         }
     }

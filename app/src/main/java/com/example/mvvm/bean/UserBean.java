@@ -1,7 +1,6 @@
 package com.example.mvvm.bean;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
@@ -11,26 +10,16 @@ import androidx.room.PrimaryKey;
  */
 @Entity
 public class UserBean {
-    @PrimaryKey
-    public int id;
+    @PrimaryKey(autoGenerate = true)
+    public long id;
     private String userName;
     private String phone;
 
-    @Ignore
-    public UserBean(String userName) {
-        this.userName = userName;
-    }
-
-    public UserBean(String userName, String phone) {
-        this.userName = userName;
-        this.phone = phone;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -48,5 +37,14 @@ public class UserBean {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "UserBean{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }
